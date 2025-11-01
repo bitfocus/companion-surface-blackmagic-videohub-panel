@@ -10,6 +10,7 @@ import {
 import debounce from 'debounce-fn'
 import type { VideohubServer } from './server/videohub.js'
 import type { SurfaceInfo } from './main.js'
+import { MAX_PAGE_COUNT } from './server/constants.js'
 
 export class VideohubPanelWrapper implements SurfaceInstance {
 	readonly #logger: ModuleLogger
@@ -19,7 +20,11 @@ export class VideohubPanelWrapper implements SurfaceInstance {
 	readonly #info: SurfaceInfo
 	readonly #context: SurfaceContext
 
-	readonly #pressHandler = (clientId: string, _destination: number, button: number) => {
+	#lastConfig = {
+		pageCount: 0,
+	}
+
+	readonly #pressHandler = (clientId: string, destination: number, button: number) => {
 		if (clientId !== this.#info.panelInfo.id) return
 
 		const { buttonsColumns, buttonsRows } = this.#info.panelInfo
@@ -30,9 +35,11 @@ export class VideohubPanelWrapper implements SurfaceInstance {
 			return
 		}
 
-		const controlId = `${row}/${col}`
-		this.#logger.debug(`Button press: ${controlId} (button: ${button})`)
-		this.#context.keyDownUpById(controlId) // TODO - pageOffset
+		const rowOffset = Math.min(Math.max(0, destination), MAX_PAGE_COUNT - 1) * buttonsRows
+
+		const controlId = `${row + rowOffset}/${col}`
+		this.#logger.debug(`Button press: ${controlId} (button: ${button} destination: ${destination})`)
+		this.#context.keyDownUpById(controlId)
 	}
 
 	readonly #disconnectHandler = (clientId: string) => {
@@ -90,6 +97,32 @@ export class VideohubPanelWrapper implements SurfaceInstance {
 	}
 
 	async ready(): Promise<void> {}
+
+	async updateConfig(config: Record<string, any>): Promise<void> {
+		this.#logger.debug('Updating config: ' + JSON.stringify(config))
+
+		const page_count = Math.floor(config.videohub_page_count / 2) * 2
+		if (this.#lastConfig.pageCount != page_count) {
+			this.#setPageCount(page_count)
+		}
+
+		this.#lastConfig = {
+			pageCount: page_count,
+		}
+	}
+
+	/**
+	 * Set the number of page buttons to use on the panel
+	 */
+	#setPageCount(value: number): void {
+		this.#logger.debug(`page count: ${value}`)
+
+		try {
+			this.#server.configureDevice(this.#info.panelInfo.id, { destinationCount: value })
+		} catch (e) {
+			this.#logger.error('Failed to set videohub panel destination count: ' + e?.toString())
+		}
+	}
 
 	async setBrightness(percent: number): Promise<void> {
 		this.#debouncedSetBrightness(percent)

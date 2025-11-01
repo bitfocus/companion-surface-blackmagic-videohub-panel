@@ -47,12 +47,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@companion-surface/base@npm:~0.3.1":
-  version: 0.3.1
-  resolution: "@companion-surface/base@npm:0.3.1"
+"@companion-surface/base@npm:~0.4.0":
+  version: 0.4.0
+  resolution: "@companion-surface/base@npm:0.4.0"
   dependencies:
     tslib: "npm:^2.8.1"
-  checksum: 10c0/4df9575dd5a942041e6315bda8307ccde0b753c25ce231313cfa419fa7ba514ff83f8eae7945243d0fa5517505b2a6e3b6f6b43b4e48581afaa4a4f9061d373e
+  checksum: 10c0/41f401ee515ef758add27503ce004cd7d59bf8446853870e3d89beef4eb425d69625f52f0791a1f7190422170d4f3786a78ab81d309c5fbd6a0809bf4ac926c7
   languageName: node
   linkType: hard
 
@@ -998,7 +998,7 @@ __metadata:
   resolution: "companion-surface-blackmagic-videohub-panel@workspace:."
   dependencies:
     "@companion-module/tools": "npm:2.4.2-nightly-main-20251021-232112-36bfae9"
-    "@companion-surface/base": "npm:~0.3.1"
+    "@companion-surface/base": "npm:~0.4.0"
     "@types/node": "npm:^22.18.13"
     debounce-fn: "npm:^6.0.0"
     eslint: "npm:^9.38.0"

@@ -11,6 +11,7 @@ import { VideohubPanelWrapper } from './instance.js'
 import { createSurfaceSchema } from './surface-schema.js'
 import { VideohubServer } from './server/videohub.js'
 import EventEmitter from 'node:events'
+import { MAX_PAGE_COUNT } from './server/constants.js'
 
 const logger = createModuleLogger('Plugin')
 
@@ -143,6 +144,18 @@ class BlackmagicVideohubPanelPlugin implements SurfacePlugin<SurfaceInfo> {
 				surfaceLayout: createSurfaceSchema(pluginInfo),
 				pincodeMap: null,
 				location: null,
+				configFields: [
+					{
+						id: 'videohub_page_count',
+						type: 'number',
+						label: 'Page Count',
+						description: "Number of 'page' buttons to enable on the panel. This applies a vertical offset",
+						default: 0,
+						min: 0,
+						step: 2,
+						max: MAX_PAGE_COUNT,
+					},
+				],
 			},
 		}
 	}
