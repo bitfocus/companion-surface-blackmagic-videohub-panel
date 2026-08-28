@@ -28,7 +28,7 @@
 		"debounce-fn": "^6.0.0"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "^2.5.0",
+		"@companion-module/tools": "^2.8.0",
 		"@types/node": "^22.19.3",
 		"eslint": "^9.39.2",
 		"husky": "^9.1.7",
